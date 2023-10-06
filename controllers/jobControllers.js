@@ -18,13 +18,13 @@ export const getAllJobs = async (req, res) => {
     ];
   }
   if (job_status && job_status !== "all") queryObject.job_status = job_status;
-  console.log(queryObject);
+  // console.log(queryObject);
 
   if (job_type && job_type !== "all") queryObject.job_type = job_type;
 
   const sortOptions = {
-    oldest: "-createdAt",
-    newest: "createdAt",
+    oldest: "createdAt",
+    newest: "-createdAt",
     "a-z": "position",
     "z-a": "-position",
   };
@@ -40,6 +40,8 @@ export const getAllJobs = async (req, res) => {
     .sort(sortKey)
     .skip(skip)
     .limit(limit);
+
+  //console.log(jobs[0].company);
 
   const jobsCount = await Job.countDocuments(queryObject);
 
@@ -91,10 +93,17 @@ export const deleteJob = async (req, res) => {
 };
 
 export const showStats = async (req, res) => {
-  let stats = await Job.aggregate([
-    { $match: { created_by: new mongoose.Types.ObjectId(req.user.userId) } },
-    { $group: { _id: "$job_status", count: { $sum: 1 } } },
-  ]);
+  let stats;
+  if (req.user.role == "admin") {
+    stats = await Job.aggregate([
+      { $group: { _id: "$job_status", count: { $sum: 1 } } },
+    ]);
+  } else {
+    stats = await Job.aggregate([
+      { $match: { created_by: new mongoose.Types.ObjectId(req.user.userId) } },
+      { $group: { _id: "$job_status", count: { $sum: 1 } } },
+    ]);
+  }
   stats = stats.reduce((acc, curr) => {
     const { _id: title, count } = curr;
     acc[title] = count;
@@ -104,7 +113,7 @@ export const showStats = async (req, res) => {
     pending: stats.pending || 0,
     interview: stats.interview || 0,
     declined: stats.declined || 0,
-    accepted: stats.accepted,
+    accepted: stats.accepted || 0,
   };
   let monthlyApplications = await Job.aggregate([
     { $match: { created_by: new mongoose.Types.ObjectId(req.user.userId) } },

@@ -16,6 +16,7 @@ const Job = ({
   job_status,
   job_type,
   createdAt,
+  jobId,
 }) => {
   const date = day(createdAt).format("MMM Do, YYYY");
   return (
@@ -24,7 +25,7 @@ const Job = ({
         <div className="main-icon">{company.charAt(0)}</div>
         <div className="info">
           <h5>{position}</h5>
-          <p>{company}</p>
+          <p>{`${company}` + (jobId ? `-${jobId}` : "")}</p>
         </div>
       </header>
       <div className="content">

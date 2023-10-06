@@ -14,7 +14,7 @@ const SearchContainer = () => {
     //since this is the function that is being returned therefore it would have access to event
     return (e) => {
       clearTimeout(timeout);
-      setTimeout((form) => {
+      setTimeout(() => {
         onChange(e);
       }, 2000);
     };

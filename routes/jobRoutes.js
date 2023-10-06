@@ -7,10 +7,13 @@ import {
   deleteJob,
   showStats,
 } from "../controllers/jobControllers.js";
+import { getAllNewJobUser } from "../controllers/newJobControllers.js";
 import { validateJobInput } from "../middleware/validationMiddleware.js";
 const router = express.Router();
 
 router.route("/").get(getAllJobs).post(validateJobInput, createJob);
+
+router.route("/new-jobs").get(getAllNewJobUser);
 
 router.route("/show-stats").get(showStats);
 

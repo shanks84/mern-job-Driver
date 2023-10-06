@@ -18,7 +18,7 @@ const app = express();
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
-
+//without this req.body would be undefined
 app.use(express.json());
 //to read cookies
 app.use(cookieParser());
@@ -30,6 +30,7 @@ import errorHandlerMiddleware from "./middleware/errorHandlerMiddleware.js";
 import jobsRouter from "./routes/jobRoutes.js";
 import authRouter from "./routes/authRoutes.js";
 import userRouter from "./routes/userRoutes.js";
+import newJobRouter from "./routes/newJobRouter.js";
 
 //public
 import { dirname } from "path";
@@ -37,7 +38,10 @@ import { fileURLToPath } from "url";
 import path from "path";
 
 import { validateTest } from "./middleware/validationMiddleware.js";
-import { authenticateUser } from "./middleware/authMiddleware.js";
+import {
+  authenticateUser,
+  authorizePermission,
+} from "./middleware/authMiddleware.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 app.use(express.static(path.resolve(__dirname, "./public")));
@@ -48,10 +52,12 @@ app.use("/api/v1/jobs", authenticateUser, jobsRouter);
 app.use("/api/v1/auth", authRouter);
 //get-current user router
 app.use("/api/v1/users", authenticateUser, userRouter);
+//new job router used by majorly admin "insted of authenticate user make it admin only"
+app.use("/api/v1/new-jobs", authenticateUser, newJobRouter);
 
 //set up in between url, and controller,our validator will be sitting on top of controller,
-app.get("/", (req, res) => {
-  res.sendFile(path.resolve(__dirname + "./public/index.html"));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "./public/_redirects/index.html"));
 });
 
 app.get("/api/v1/test", (req, res) => {

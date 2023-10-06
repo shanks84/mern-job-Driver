@@ -8,12 +8,11 @@ export const loader = async ({ request }) => {
   const params = Object.fromEntries([
     ...new URL(request.url).searchParams.entries(),
   ]);
-  // console.log(params);
+  console.log(params);
   try {
     const { data } = await customFetch.get("/jobs", {
       params,
     });
-    console.log(data);
     return { data, searchValues: { ...params } };
   } catch (error) {
     toast.error(error?.response?.data?.message);
@@ -28,7 +27,7 @@ const AllJobs = () => {
   return (
     <AllJobsContext.Provider value={{ data, searchValues }}>
       <SearchContainer />
-      <JobsContainer />
+      <JobsContainer data={data} />
     </AllJobsContext.Provider>
   );
 };

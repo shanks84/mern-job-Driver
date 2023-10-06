@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import { JOB_STATUS, JOB_TYPE } from "../utils/constants.js";
-
-const JobSchema = mongoose.Schema(
+const newJobSchema = mongoose.Schema(
   {
     jobId: String,
     company: String,
@@ -17,13 +16,9 @@ const JobSchema = mongoose.Schema(
       default: JOB_TYPE.FTE,
     },
     location: String,
-    created_by: {
-      type: mongoose.Types.ObjectId,
-      ref: "User",
-    },
     link: String,
   },
   { timestamps: true }
 );
 
-export default mongoose.model("Job", JobSchema);
+export default mongoose.model("newJob", newJobSchema);

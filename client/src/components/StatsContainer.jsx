@@ -1,9 +1,10 @@
 import { FaSuitcaseRolling, FaCalendarCheck, FaBug } from "react-icons/fa";
+import { AiFillCarryOut } from "react-icons/ai";
 import Wrapper from "../assets/wrappers/StatsContainer";
 import StatItem from "./StatItem";
 
 const StatsContainer = ({ defaultStats }) => {
-  const { pending, interview, declined } = defaultStats;
+  const { pending, interview, accepted } = defaultStats;
   const stats = [
     {
       title: "Pending applications",
@@ -20,10 +21,10 @@ const StatsContainer = ({ defaultStats }) => {
       bcg: "e0e8f9",
     },
     {
-      title: "jobs declined",
-      count: declined || 0,
-      icon: <FaBug />,
-      color: "#d66a6a",
+      title: "jobs accepted",
+      count: accepted || 0,
+      icon: <AiFillCarryOut />,
+      color: "#0A0",
       bcg: "#ffeeee",
     },
     // {

@@ -9,9 +9,12 @@ import customFetch from "../utils/customFetch";
 export const action = async ({ request }) => {
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
+  console.log(data);
   try {
-    await customFetch.post("/jobs", data);
+    if (data.link) await customFetch.post("/new-jobs", data);
+    else await customFetch.post("/jobs", data);
     toast.success("job created");
+    if (data.link) return redirect("/dashboard/new-jobs");
     return redirect("/dashboard/all-jobs");
   } catch (error) {
     toast.error(error?.response?.data?.message);
@@ -21,6 +24,7 @@ export const action = async ({ request }) => {
 
 const AddJob = () => {
   const { user } = useOutletContext();
+  console.log(user);
   const navigation = useNavigation();
   const isSubmitting = navigation.state == "submitting";
   return (
@@ -48,6 +52,9 @@ const AddJob = () => {
             defaultValue={JOB_TYPE.FTE_INERN}
             list={Object.values(JOB_TYPE)}
           />
+          {user.role == "admin" && (
+            <FormRow type="text" label="form-link" name="link" />
+          )}
           <button
             type="submit"
             className="btn btn-block form-btn"

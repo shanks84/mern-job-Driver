@@ -67,13 +67,15 @@ const Wrapper = styled.article`
     align-items: center;
   }
   .edit-btn,
-  .delete-btn {
+  .delete-btn,
+  .apply-btn {
     height: 30px;
     font-size: 0.85rem;
     display: flex;
     align-items: center;
   }
-  .edit-btn {
+  .edit-btn,
+  .apply-btn {
     margin-right: 0.5rem;
   }
   .accepted {
@@ -83,6 +85,23 @@ const Wrapper = styled.article`
   .assessment {
     color: #743383;
     background: #d192df;
+  }
+  .job-icon {
+    font-size: 1rem;
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+    svg {
+      color: var(--text-secondary-color);
+    }
+  }
+  .job-text {
+    text-transform: capitalize;
+    letter-spacing: var(--letter-spacing);
+  }
+  .job-link {
+    display: flex;
+    align-items: center;
   }
 `;
 
